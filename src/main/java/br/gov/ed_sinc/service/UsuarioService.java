@@ -3,6 +3,7 @@ package br.gov.ed_sinc.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ import br.gov.ed_sinc.projection.pesquisa.PageUsuarioPesquisaProjection;
 import br.gov.ed_sinc.projection.pesquisa.impl.PageUsuarioPesquisaProjectionImpl;
 import br.gov.ed_sinc.projection.relatorio.UsuarioRelatorioProjection;
 import br.gov.ed_sinc.repository.UsuarioRepository;
+import br.gov.ed_sinc.security.ResetSenhaEditRequest;
+import br.gov.ed_sinc.security.ResetSenhaRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -31,6 +34,8 @@ import lombok.AllArgsConstructor;
 @Service
 public class UsuarioService {
 	
+	@Value("${edsinc.frontend-url}")
+	private String frontendURL;
 	public static final Integer MAX_FAILURE_ATTEMPTS = 3;
 	final PasswordEncoder passwordEncoder;
 	UsuarioRepository usuarioRepository;
@@ -91,7 +96,7 @@ public class UsuarioService {
 		String jwtToken = bearerToken.split(" ")[1].trim();
 		String username = jwtService.extractUsername(jwtToken);
 		Optional<Usuario> requisitante = usuarioRepository.findByEmail(username);
-		if (requisitante.get().getCategoria() == Categoria.Administrador) {
+	    if (requisitante.isPresent() && requisitante.get().getCategorias().contains(Categoria.Administrador)) {
 			Optional<Usuario> usuario = usuarioRepository.findById(id);
 			if (usuario.isPresent()) {
 				usuarioRepository.updateStatus(Status.Bloqueado, usuario.get().getEmail());
@@ -109,7 +114,7 @@ public class UsuarioService {
 		String jwtToken = bearerToken.split(" ")[1].trim();
 		String username = jwtService.extractUsername(jwtToken);
 		Optional<Usuario> requisitante = usuarioRepository.findByEmail(username);
-		if (requisitante.get().getCategoria() == Categoria.Administrador) {
+		if (requisitante.isPresent() && requisitante.get().getCategorias().contains(Categoria.Administrador)) {
 			Optional<Usuario> usuarioBloqueado = usuarioRepository.findById(id);
 			if (usuarioBloqueado.isPresent()) {
 				usuarioRepository.updateAccountNonLocked(true, usuarioBloqueado.get().getEmail());
@@ -143,21 +148,7 @@ public class UsuarioService {
 	public void resetarAccountNonLocked(String email) {
 		usuarioRepository.updateAccountNonLocked(true, email);
 	}
-/*
-	@Transactional
-	public ResponseEntity<Void> resetarSenha(ResetSenhaRequest request, String token, String linkResetSenha) {
-		Optional<Usuario> usuario = usuarioRepository.findByEmail(request.getEmail());
-		if (usuario.isPresent()) {
-			usuario.get().setResetSenhaToken(token);
-			usuarioRepository.save(usuario.get());
-			emailService.enviarEmailRecuperacaoSenha(request.getEmail(), token, linkResetSenha);
-			return ResponseEntity.accepted().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
 
-	}
-*/
 	public void atualizarSenha(Usuario usuario, String novaSenha) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(novaSenha);
@@ -184,7 +175,7 @@ public class UsuarioService {
 
 	}
 	
-	/*
+	
 	@Transactional
 	public ResponseEntity<Void> editarUsuarioPorToken(ResetSenhaEditRequest request, String token) {
 		Optional<Usuario> usuario = usuarioRepository.findByResetSenhaToken(token);
@@ -199,13 +190,28 @@ public class UsuarioService {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	*/
+	
+	@Transactional
+	public ResponseEntity<Void> resetarSenha(ResetSenhaRequest request, String token) {
+		String linkResetSenha = frontendURL + "/reset";
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(request.getEmail());
+		if (usuario.isPresent()) {
+			usuario.get().setResetSenhaToken(token);
+			usuarioRepository.save(usuario.get());
+			emailService.enviarEmailRecuperacaoSenha(request.getEmail(), token, linkResetSenha);
+			return ResponseEntity.accepted().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+	
 
 	public void autorizarAdmin(String bearerToken) {
 		String jwtToken = bearerToken.split(" ")[1].trim();
 		String username = jwtService.extractUsername(jwtToken);
 		Optional<Usuario> requisitante = usuarioRepository.findByEmail(username);
-		if (requisitante.get().getCategoria() != Categoria.Administrador) {
+		if (!requisitante.get().getCategorias().contains(Categoria.Administrador)) {
 			throw new NegocioException(String.format("Seu usuário não tem permissão para essa operação "));
 		}
 	}
@@ -214,7 +220,7 @@ public class UsuarioService {
 		String jwtToken = bearerToken.split(" ")[1].trim();
 		String username = jwtService.extractUsername(jwtToken);
 		Optional<Usuario> requisitante = usuarioRepository.findByEmail(username);
-		if (requisitante.get().getCategoria() == Categoria.Administrador) {
+		if (requisitante.isPresent() && requisitante.get().getCategorias().contains(Categoria.Administrador)) {
 			return true;
 		} 
 		return false;	

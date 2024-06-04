@@ -11,7 +11,6 @@ public class AuthenticationResponse {
 
 	private String token;
 	private String nome;
-	private String categoria;
 
     public AuthenticationResponse() {
         // no-arg constructor for frameworks

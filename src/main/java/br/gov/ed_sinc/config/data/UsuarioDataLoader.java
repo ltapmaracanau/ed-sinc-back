@@ -1,5 +1,8 @@
 package br.gov.ed_sinc.config.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,7 +32,7 @@ public class UsuarioDataLoader implements CommandLineRunner {
         	usuario.setNome("Administrador");
         	usuario.setEmail("mirandajoaoj@gmail.com");
         	usuario.setSenha(passwordEncoder.encode("Abcd12345"));
-        	usuario.setCategoria(Categoria.Administrador);
+        	usuario.setCategorias(new ArrayList<Categoria>(List.of(Categoria.Administrador)));
         	usuarioRepository.save(usuario);
         	
         	System.out.println(usuario);

@@ -6,10 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Status {
-	
 	Ativo("Ativo"), 
 	Arquivado("Arquivado"),
-	Bloqueado("Bloqueado");
+	Bloqueado("Bloqueado"),
+	Inativo("Inativo");
 
 	private String descricao;
 

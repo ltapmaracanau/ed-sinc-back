@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.ed_sinc.model.Usuario;
-import br.gov.ed_sinc.service.EmailService;
 import br.gov.ed_sinc.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,9 +30,6 @@ public class AuthenticationController {
 
 	@Autowired
 	private UsuarioService usuarioService;
-	
-	@Autowired
-	private EmailService emailService;
 	
 	/*
 	@PostMapping("/registerall")
@@ -75,20 +71,20 @@ public class AuthenticationController {
 		return authService.usuarioReport(email);
 	}
 	
-	/*
+	/*envia ao usuario o link + token de reset*/
 	@PostMapping("/reset")
 	public ResponseEntity<Void> enviarEmailNovaSenha(@RequestBody @Valid ResetSenhaRequest request) {
 		String token = RandomString.make(8);
-		String linkResetSenha = "https://www.adelco.ltap.ifce.edu.br/#/reset";
-		return usuarioService.resetarSenha(request, token, linkResetSenha);
+		return usuarioService.resetarSenha(request, token);
 	}
-
+	
+	/*edita o usuario com o token de reset*/
 	@PutMapping("/reset/{token}")
 	public ResponseEntity<Void> cadastrarNovaSenha(@RequestBody @Valid ResetSenhaEditRequest request,
 			@PathVariable String token) {
 		return usuarioService.editarUsuarioPorToken(request, token);
 	}
-	
+	/*
 	@PostMapping("/contato")
 	public ResponseEntity<String> enviarMensagemContato(@RequestBody @Valid MensagemContatoRequest request) {
 		return emailService.enviarMensagemContato(request);

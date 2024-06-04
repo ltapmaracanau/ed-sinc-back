@@ -5,6 +5,8 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,75 +25,68 @@ public class EmailService {
 	@Value("${spring.mail.username}")
 	private String sender;
 	
-	public String enviarEmailRecuperacaoSenha(String email, String token, String linkResetSenha) {
+    public ResponseEntity<Void> enviarEmailRecuperacaoSenha(String email, String token, String linkResetSenha) {
+        try {
+            String subject = "Redefinição de senha ed-sinc";
+            
+            String htmlContent = "<html><body style='text-align: center;'>"
+                    + "<p style='font-size: 20px;'>Prezado(a),</p>"
+                    + "<p style='font-size: 16px;'>Você solicitou a redefinição da sua senha. Utilize o Token a seguir para continuar a alteração:</p>"
+                    + "<p style='font-size: 20px;'><strong style='animation: bounce 1s infinite;'>" + token + "</strong></p>"
+                    + "<p style='font-size: 16px;'>Caso você não tenha feito essa solicitação, por favor ignore este e-mail.</p>"
+                    + "<p style='font-size: 16px;'>Mensagem gerada automaticamente, não responda este e-mail.</p>"
+                    + "</body>"
+                    + "<style>"
+                    + "@keyframes bounce { 0%, 100%, 20%, 50%, 80% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);}}"
+                    + "</style>"
+                    + "</html>";
+            
+            MimeMessage message = javaMailSender.createMimeMessage();
+            
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(sender);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
 
-		try {
-			String Subject = "Redefinição de senha ed-sinc";
-			
-			
-			String htmlContent = "<html><body style='text-align: center;'>"
-				    + "<p style='font-size: 20px;'>Prezado(a),</p>"
-				    + "<p style='font-size: 16px;'>Você solicitou a redefinição da sua senha. Utilize o Token a seguir para continuar a alteração:</p>"
-				    + "<p style='font-size: 20px;'><strong style='animation: bounce 1s infinite;'>"+ token +"</strong></p>"
-				    + "<p style='font-size: 16px;'>Caso você não tenha feito essa solicitação, por favor ignore este e-mail.</p>"
-				    + "<p style='font-size: 16px;'>Mensagem gerada automaticamente, não responda este e-mail.</p>"
-				    + "</body>"
-				    + "<style>"
-				    + "@keyframes bounce { 0%, 100%, 20%, 50%, 80% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);}}"
-				    + "</style>"
-				    + "</html>";
-			
-			MimeMessage message = javaMailSender.createMimeMessage();
-			
-		    MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		    helper.setFrom(sender);
-		    helper.setTo(email);
-		    helper.setSubject(Subject);
-		    helper.setText(htmlContent, true);
-
-			javaMailSender.send(message);
-			return "Mail Sent Successfully...";
-		}
-
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-			return "Error while Sending Mail";
-		}
-	}
+            javaMailSender.send(message);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 	
-	public String enviarEmailConfirmacaoCadastro(String email, String token, String linksetSenha) {
+    public ResponseEntity<Void> enviarEmailConfirmacaoCadastro(String email, String token, String linksetSenha) {
+        try {
+            String subject = "Conclusão de cadastro ed-sinc";
+            String htmlContent = "<html><body style='text-align: center;'>"
+                    + "<p style='font-size: 20px;'>Prezado(a),</p>"
+                    + "<p style='font-size: 16px;'>Para concluir seu cadastro no ed-sinc, utilize o token abaixo: </p>"
+                    + "<p style='font-size: 20px;'><strong style='animation: bounce 1s infinite;'>" + token + "</strong></p>"
+                    + "<p style='font-size: 16px;'>Caso você não tenha feito essa solicitação, por favor ignore este e-mail.</p>"
+                    + "<p style='font-size: 16px;'>Mensagem gerada automaticamente, não responda este e-mail.</p>"
+                    + "</body>"
+                    + "<style>"
+                    + "@keyframes bounce { 0%, 100%, 20%, 50%, 80% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);}}"
+                    + "</style>"
+                    + "</html>";
+            
+            MimeMessage message = javaMailSender.createMimeMessage();
+            
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(sender);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
 
-		try {
-			String Subject = "Conclusão de cadastro ed-sinc";
-			String htmlContent = "<html><body style='text-align: center;'>"
-				    + "<p style='font-size: 20px;'>Prezado(a),</p>"
-				    + "<p style='font-size: 16px;'>Para concluir seu cadastro no ed-sinc, utilize o token abaixo: </p>"
-				    + "<p style='font-size: 20px;'><strong style='animation: bounce 1s infinite;'>"+ token +"</strong></p>"
-				    + "<p style='font-size: 16px;'>Caso você não tenha feito essa solicitação, por favor ignore este e-mail.</p>"
-				    + "<p style='font-size: 16px;'>Mensagem gerada automaticamente, não responda este e-mail.</p>"
-				    + "</body>"
-				    + "<style>"
-				    + "@keyframes bounce { 0%, 100%, 20%, 50%, 80% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);}}"
-				    + "</style>"
-				    + "</html>";
-			MimeMessage message = javaMailSender.createMimeMessage();
-			
-
-		    MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		    helper.setFrom(sender);
-		    helper.setTo(email);
-		    helper.setSubject(Subject);
-		    helper.setText(htmlContent, true);
-
-			javaMailSender.send(message);
-			return "Mail Sent Successfully...";
-		}
-
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-			return "Error while Sending Mail";
-		}
-	}
+            javaMailSender.send(message);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 	
 	public String sendSimpleMail(EmailDetails details) {

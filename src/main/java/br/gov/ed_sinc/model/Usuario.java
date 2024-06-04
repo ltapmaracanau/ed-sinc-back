@@ -3,8 +3,10 @@ package br.gov.ed_sinc.model;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.enums.Status;
 import br.gov.ed_sinc.validator.validate.ValidateSenha;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -56,10 +59,10 @@ public class Usuario implements UserDetails {
 	@NotBlank
 	@Size(max = 60)
 	private String nome;
-/*
-	@ValidateCpf
+
+	@CPF
 	private String cpf;
-*/
+
 	@NotBlank
 	@Size(max = 255)
 	@Email
@@ -68,14 +71,18 @@ public class Usuario implements UserDetails {
 	@ValidateSenha
 	private String senha;
 
-	@Enumerated(EnumType.ORDINAL)
-	@NotNull
-	private Categoria categoria;
+    @ElementCollection(targetClass = Categoria.class)
+    @Enumerated(EnumType.ORDINAL)
+    @NotNull
+    private List<Categoria> categorias;
 
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 
 	private String resetSenhaToken;
+	
+	@Builder.Default
+	private Boolean exportado = false;
 
 	@Builder.Default
 	private boolean accountNonLocked = true;
@@ -86,13 +93,15 @@ public class Usuario implements UserDetails {
 	@Builder.Default
 	@Enumerated(EnumType.ORDINAL)
 	@NotNull
-	private Status status = Status.Ativo;
+	private Status status = Status.Inativo;
 	
 	private String telefone;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(categoria.getDescricao()));
+	    return categorias.stream()
+	        .map(cat -> new SimpleGrantedAuthority(cat.getDescricao()))
+	        .collect(Collectors.toList());
 	}
 
 	@Override

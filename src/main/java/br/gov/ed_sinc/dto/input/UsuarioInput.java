@@ -1,6 +1,9 @@
 package br.gov.ed_sinc.dto.input;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,10 +33,10 @@ public class UsuarioInput {
 	@Email
 	@NotBlank
 	private String email;
-	/*
-	@ValidateCpf
+
+	@CPF
 	private String cpf;
-	*/
+
 	//@ValidateTelefone
 	private String telefone;
 	
@@ -42,7 +45,7 @@ public class UsuarioInput {
 	private LocalDate dataNascimento;
 	
 	@NotNull
-	private Categoria categoria;
+	private List<Categoria> categorias;
 	
 	@JsonIgnore
 	public String getSenha() {

@@ -49,9 +49,7 @@ public class JwtService {
 		Optional <Usuario> usuario = usuarioService.buscarPorEmail(userDetails.getUsername());
 		
 		if (usuario.isPresent()) {
-		    extraClaims.put("categoria", usuario.get().getCategoria());
-		} else {
-		    extraClaims.put("categoria", "COM");
+		    extraClaims.put("categorias", usuario.get().getCategorias());
 		}
 		 
 		return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())

@@ -1,6 +1,8 @@
 package br.gov.ed_sinc.security;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -24,10 +26,10 @@ public class RegisterRequest {
 	@NotBlank
 	@Size(max = 60)
 	private String nome;
-	/*
+
 	@CPF
 	private String cpf;
-	*/
+
 	@Email
 	@NotBlank
 	private String email;
@@ -37,9 +39,9 @@ public class RegisterRequest {
 	@NotNull
 	@Past
 	private LocalDate dataNascimento;
-	
+
 	@Builder.Default
-	private Categoria categoria = Categoria.Aluno;
+	private List<Categoria> categorias = new ArrayList<Categoria>(List.of(Categoria.Aluno));
 	
 	private String telefone;
 	

@@ -1,7 +1,10 @@
 package br.gov.ed_sinc.security;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,14 +32,17 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final UsuarioService usuarioService;
 
+	@Value("${edsinc.frontend-url}")
+	private String frontendURL;
+
 	public AuthenticationResponse register(RegisterRequest request) {
 		var user = Usuario.builder()
 				.nome(request.getNome())
-				//.cpf(request.getCpf())
+				.cpf(request.getCpf())
 				.email(request.getEmail())
 				.senha(passwordEncoder.encode(request.getSenha()))
 				.telefone(request.getTelefone())
-				.categoria(request.getCategoria())
+				.categorias(request.getCategorias())
 				.accountNonLocked(true)
 				.dataNascimento(request.getDataNascimento())
 				.failedAttempt(0)
@@ -50,11 +56,11 @@ public class AuthenticationService {
 		String senha = RandomString.make(20);
 		var user = Usuario.builder()
 				.nome(request.getNome())
-				//.cpf(request.getCpf())
+				.cpf(request.getCpf())
 				.email(request.getEmail())
 				.senha(passwordEncoder.encode(senha))
 				.telefone(request.getTelefone())
-				.categoria(Categoria.Aluno)
+				.categorias(new ArrayList<Categoria>(List.of(Categoria.Aluno)))
 				.accountNonLocked(true)
 				.dataNascimento(request.getDataNascimento())
 				.failedAttempt(0)
@@ -62,7 +68,7 @@ public class AuthenticationService {
 		repository.save(user);
 		var jwtToken = jwtService.generateToken(user);
 		String token = RandomString.make(8);
-		String linksetSenha = "https://url.padrao.br/novaSenha";
+		String linksetSenha = frontendURL + "/novaSenha";
 		usuarioService.setarSenhaUsuarioComum(request.getEmail(), token, linksetSenha);
 		return AuthenticationResponse.builder().token(jwtToken).build();
 	}
@@ -80,7 +86,10 @@ public class AuthenticationService {
 		//		nome = nome.substring(0, index);
 		//	} 
 		
-		return AuthenticationResponse.builder().token(jwtToken).nome(nome).categoria(user.getCategoria().toString()).build();
+		return AuthenticationResponse.builder()
+		        .token(jwtToken)
+		        .nome(nome)
+		        .build();
 	}
 
 	public AuthenticationUsuarioReportResponse usuarioReport(String email) {
