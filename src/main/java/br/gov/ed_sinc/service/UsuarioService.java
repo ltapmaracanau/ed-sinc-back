@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,15 +32,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class UsuarioService {
-	
-	@Value("${edsinc.frontend-url}")
-	private String frontendURL;
-	public static final Integer MAX_FAILURE_ATTEMPTS = 3;
-	final PasswordEncoder passwordEncoder;
-	UsuarioRepository usuarioRepository;
-	JavaMailSender mailSender;
-	EmailService emailService;
-	JwtService jwtService;
+    public static final Integer MAX_FAILURE_ATTEMPTS = 3;
+    private final PasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final EmailService emailService;
+    private final JwtService jwtService;
+
+    @Value("${edsinc.frontend-url}")
+    private String frontendURL;
+
 
 	public Usuario buscarOuFalhar(Long id) {
 		return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
