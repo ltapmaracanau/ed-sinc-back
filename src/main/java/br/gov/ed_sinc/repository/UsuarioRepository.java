@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import br.gov.ed_sinc.model.Usuario;
 import br.gov.ed_sinc.model.enums.Status;
-import br.gov.ed_sinc.projection.GenericoIdNomeProjection;
+import br.gov.ed_sinc.projection.pesquisa.UsuarioPesquisaProjection;
 import br.gov.ed_sinc.projection.relatorio.UsuarioRelatorioProjection;
 
 
@@ -52,7 +52,7 @@ public interface UsuarioRepository extends CustomJpaRepository<Usuario, Long>{
 		    value = "SELECT DISTINCT u FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND u.status = :usuarioStatus ORDER BY u.nome ASC",
 		    countQuery = "SELECT COUNT(DISTINCT u) FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND u.status = :usuarioStatus"
 		)
-		Page<GenericoIdNomeProjection> listarUsuariosPesquisaProjetado(
+		Page<UsuarioPesquisaProjection> listarUsuariosPesquisaProjetado(
 		    @Param("usuarioNome") String usuarioNome, 
 		    @Param("usuarioEmail") String usuarioEmail,
 		    @Param("usuarioStatus") Status usuarioStatus, 

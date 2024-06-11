@@ -18,8 +18,8 @@ import br.gov.ed_sinc.filter.UsuarioFilter;
 import br.gov.ed_sinc.model.Usuario;
 import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.enums.Status;
-import br.gov.ed_sinc.projection.GenericoIdNomeProjection;
 import br.gov.ed_sinc.projection.pesquisa.PageUsuarioPesquisaProjection;
+import br.gov.ed_sinc.projection.pesquisa.UsuarioPesquisaProjection;
 import br.gov.ed_sinc.projection.pesquisa.impl.PageUsuarioPesquisaProjectionImpl;
 import br.gov.ed_sinc.projection.relatorio.UsuarioRelatorioProjection;
 import br.gov.ed_sinc.repository.UsuarioRepository;
@@ -274,7 +274,7 @@ public class UsuarioService {
 	}
 	
 	public PageUsuarioPesquisaProjection listarUsuariosPesquisaProjetado(UsuarioFilter filtro, Pageable pageable) {
-        Page<GenericoIdNomeProjection> page = usuarioRepository.listarUsuariosPesquisaProjetado(filtro.getNome(), filtro.getEmail(),Status.Ativo ,pageable);
+        Page<UsuarioPesquisaProjection> page = usuarioRepository.listarUsuariosPesquisaProjetado(filtro.getNome(), filtro.getEmail(),Status.Ativo ,pageable);
         return new PageUsuarioPesquisaProjectionImpl(page);
 	}
 	

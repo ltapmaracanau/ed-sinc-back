@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import br.gov.ed_sinc.model.Usuario;
 import br.gov.ed_sinc.model.enums.Categoria;
+import br.gov.ed_sinc.model.enums.Status;
 import br.gov.ed_sinc.repository.UsuarioRepository;
 
 @Component
@@ -32,12 +33,35 @@ public class UsuarioDataLoader implements CommandLineRunner {
         	usuario.setNome("Administrador");
         	usuario.setEmail("mirandajoaoj@gmail.com");
         	usuario.setSenha(passwordEncoder.encode("Abcd12345"));
-        	usuario.setCategorias(new ArrayList<Categoria>(List.of(Categoria.Administrador)));
+        	usuario.setStatus(Status.Ativo);
+        	usuario.setCategorias(new ArrayList<>(List.of(Categoria.Administrador)));
         	usuarioRepository.save(usuario);
         	
-        	System.out.println(usuario);
-	    	
-	        System.out.println("Cadastro do Usuário Administrador concluído.");
+        	// Massa de teste
+            List<Usuario> usuariosTeste = new ArrayList<>();
+        	
+            for (int i = 2; i <= 15; i++) {
+                Usuario usuarioTeste = new Usuario();
+                usuarioTeste.setNome("Usuario" + i);
+                usuarioTeste.setEmail("usuario" + i + "@gmail.com");
+                usuarioTeste.setSenha(passwordEncoder.encode("Abcd12345"));
+                usuarioTeste.setStatus(Status.Ativo);
+                usuarioTeste.setCategorias(new ArrayList<>(List.of(Categoria.Coordenador)));
+                usuariosTeste.add(usuarioTeste);
+            }
+            
+            Usuario usuarioTeste = new Usuario();
+            usuarioTeste.setNome("UsuarioTeste");
+            usuarioTeste.setEmail("usuarioTeste@gmail.com");
+            usuarioTeste.setSenha(passwordEncoder.encode("Abcd12345"));
+            usuarioTeste.setStatus(Status.Ativo);
+            usuarioTeste.setCategorias(new ArrayList<>(List.of(Categoria.Coordenador, Categoria.Mentor)));
+            usuariosTeste.add(usuarioTeste);
+            usuarioRepository.save(usuarioTeste);
+            
+            usuarioRepository.saveAll(usuariosTeste);
+
+        	System.out.println("Cadastro do Usuário Administrador e usuários de teste concluído.");
         }
     }
 }

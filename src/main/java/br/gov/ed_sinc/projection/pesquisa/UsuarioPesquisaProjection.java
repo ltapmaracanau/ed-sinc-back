@@ -1,11 +1,11 @@
-package br.gov.ed_sinc.projection.relatorio;
+package br.gov.ed_sinc.projection.pesquisa;
 
 import java.util.List;
 
 import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.enums.Status;
 
-public interface UsuarioRelatorioProjection {
+public interface UsuarioPesquisaProjection {
 	Long getId();
 	String getNome();
 	String getEmail();

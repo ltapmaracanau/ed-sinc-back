@@ -4,18 +4,18 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import br.gov.ed_sinc.projection.GenericoIdNomeProjection;
 import br.gov.ed_sinc.projection.pesquisa.PageUsuarioPesquisaProjection;
+import br.gov.ed_sinc.projection.pesquisa.UsuarioPesquisaProjection;
 
 public class PageUsuarioPesquisaProjectionImpl implements PageUsuarioPesquisaProjection {
-    private final Page<GenericoIdNomeProjection> page;
+    private final Page<UsuarioPesquisaProjection> page;
 
-    public PageUsuarioPesquisaProjectionImpl(Page<GenericoIdNomeProjection> page) {
+    public PageUsuarioPesquisaProjectionImpl(Page<UsuarioPesquisaProjection> page) {
         this.page = page;
     }
 
     @Override
-    public List<GenericoIdNomeProjection> getContent() {
+    public List<UsuarioPesquisaProjection> getContent() {
         return page.getContent();
     }
 
