@@ -8,7 +8,10 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.gov.ed_sinc.model.enums.Categoria;
+import br.gov.ed_sinc.model.enums.Status;
 import br.gov.ed_sinc.validator.validate.ValidateConfirmarSenha;
+import br.gov.ed_sinc.validator.validate.ValidateDate;
+import br.gov.ed_sinc.validator.validate.ValidateTelefone;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -37,15 +40,22 @@ public class UsuarioInput {
 	@CPF
 	private String cpf;
 
-	//@ValidateTelefone
+	@ValidateTelefone
 	private String telefone;
 	
 	@Past
-	//@ValidateDate
+	@ValidateDate
 	private LocalDate dataNascimento;
 	
 	@NotNull
+    @Size(min = 1)
 	private List<Categoria> categorias;
+	
+	@NotNull
+	private Boolean exportado;
+	
+	@NotNull
+	private Status status;
 	
 	@JsonIgnore
 	public String getSenha() {

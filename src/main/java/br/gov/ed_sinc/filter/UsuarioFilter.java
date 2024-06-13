@@ -12,4 +12,5 @@ public class UsuarioFilter {
 	private String email;
 	private Status status;
 	private Categoria categoria;
+	private Boolean exportado;
 }

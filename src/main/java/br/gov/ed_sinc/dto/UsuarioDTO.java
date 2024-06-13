@@ -33,4 +33,6 @@ public class UsuarioDTO {
 	private boolean accountNonLocked;
 	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
 	private Status status;
+	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+	private Boolean exportado;
 }

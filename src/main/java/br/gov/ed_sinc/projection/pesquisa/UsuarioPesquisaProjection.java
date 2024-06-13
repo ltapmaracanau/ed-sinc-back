@@ -1,5 +1,6 @@
 package br.gov.ed_sinc.projection.pesquisa;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import br.gov.ed_sinc.model.enums.Categoria;
@@ -11,6 +12,8 @@ public interface UsuarioPesquisaProjection {
 	String getEmail();
 	String getCpf();
 	String getTelefone();
+	LocalDate getDataNascimento();
 	Status getStatus();
+	Boolean getExportado();
 	List<Categoria> getCategorias();
 }

@@ -274,7 +274,7 @@ public class UsuarioService {
 	}
 	
 	public PageUsuarioPesquisaProjection listarUsuariosPesquisaProjetado(UsuarioFilter filtro, Pageable pageable) {
-        Page<UsuarioPesquisaProjection> page = usuarioRepository.listarUsuariosPesquisaProjetado(filtro.getNome(), filtro.getEmail(),Status.Ativo ,pageable);
+        Page<UsuarioPesquisaProjection> page = usuarioRepository.listarUsuariosPesquisaProjetado(filtro.getNome(), filtro.getEmail(), filtro.getStatus(), filtro.getCategoria(), filtro.getExportado(), pageable);
         return new PageUsuarioPesquisaProjectionImpl(page);
 	}
 	

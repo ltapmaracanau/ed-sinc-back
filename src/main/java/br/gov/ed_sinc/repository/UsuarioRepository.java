@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.gov.ed_sinc.model.Usuario;
+import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.enums.Status;
 import br.gov.ed_sinc.projection.pesquisa.UsuarioPesquisaProjection;
 import br.gov.ed_sinc.projection.relatorio.UsuarioRelatorioProjection;
@@ -49,14 +50,15 @@ public interface UsuarioRepository extends CustomJpaRepository<Usuario, Long>{
 		List<UsuarioRelatorioProjection> listarUsuariosRelatorioProjetado();
 	
 	@Query(
-		    value = "SELECT DISTINCT u FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND u.status = :usuarioStatus ORDER BY u.nome ASC",
-		    countQuery = "SELECT COUNT(DISTINCT u) FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND u.status = :usuarioStatus"
+		    value = "SELECT DISTINCT u FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND (:usuarioStatus IS NULL OR u.status = :usuarioStatus) AND (:usuarioCategoria IS NULL OR :usuarioCategoria MEMBER OF u.categorias) AND (:usuarioExportado IS NULL OR u.exportado = :usuarioExportado) ORDER BY u.nome ASC",
+		    countQuery = "SELECT COUNT(DISTINCT u) FROM Usuario u WHERE u.nome LIKE %:usuarioNome% AND u.email LIKE %:usuarioEmail% AND (:usuarioStatus IS NULL OR u.status = :usuarioStatus) AND (:usuarioCategoria IS NULL OR :usuarioCategoria MEMBER OF u.categorias) AND (:usuarioExportado IS NULL OR u.exportado = :usuarioExportado)"
 		)
 		Page<UsuarioPesquisaProjection> listarUsuariosPesquisaProjetado(
-		    @Param("usuarioNome") String usuarioNome, 
+		    @Param("usuarioNome") String usuarioNome,
 		    @Param("usuarioEmail") String usuarioEmail,
-		    @Param("usuarioStatus") Status usuarioStatus, 
+		    @Param("usuarioStatus") Status usuarioStatus,
+		    @Param("usuarioCategoria") Categoria usuarioCategoria,
+		    @Param("usuarioExportado") Boolean usuarioExportado,
 		    Pageable pageable
 		);
-	 
 }
