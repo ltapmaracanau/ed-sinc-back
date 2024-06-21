@@ -27,7 +27,6 @@ import br.gov.ed_sinc.filter.UsuarioFilter;
 import br.gov.ed_sinc.model.Usuario;
 import br.gov.ed_sinc.projection.pesquisa.PageUsuarioPesquisaProjection;
 import br.gov.ed_sinc.projection.relatorio.UsuarioRelatorioProjection;
-import br.gov.ed_sinc.repository.UsuarioRepository;
 import br.gov.ed_sinc.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,7 +43,6 @@ import lombok.AllArgsConstructor;
 @Tag(name = "Usuários")
 public class UsuarioController {
 	
-	UsuarioRepository usuarioRepository;
 	UsuarioService usuarioService;
 	UsuarioDTOAssembler usuarioDTOAssembler;
 	UsuarioInputDisassembler usuarioInputDisassembler;

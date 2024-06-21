@@ -13,26 +13,49 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 public class UsuarioDTO {
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private Long id;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private String nome;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private String email;
-	@JsonView(UsuarioView.Resumo.class)
-	private String cpf;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private String telefone;
-	@JsonView(UsuarioView.Resumo.class)
-	private LocalDate dataNascimento;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private List<Categoria> categorias;
-	@JsonView(UsuarioView.Resumo.class)
-	private boolean accountNonLocked;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private Status status;
-	@JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
-	private Boolean exportado;
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private Long id;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private String nome;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private String email;
+    
+    @JsonView(UsuarioView.Resumo.class)
+    private String cpf;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private String telefone;
+    
+    @JsonView(UsuarioView.Resumo.class)
+    private LocalDate dataNascimento;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<Categoria> categorias;
+    
+    @JsonView(UsuarioView.Resumo.class)
+    private boolean accountNonLocked;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private Status status;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private Boolean exportado;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<GrupoSocialDTO> gruposSociais;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<PessoaComDeficienciaDTO> pessoasComDeficiencia;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<PessoaNeurodivergenteDTO> pessoasNeurodivergente;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<PoloDTO> polos;
+    
+    @JsonView({UsuarioView.Resumo.class, UsuarioView.Retorno.class})
+    private List<TurmaDTO> turmas;
 }

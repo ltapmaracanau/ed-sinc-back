@@ -47,9 +47,19 @@ public class UsuarioInput {
 	@ValidateDate
 	private LocalDate dataNascimento;
 	
-	@NotNull
-    @Size(min = 1)
 	private List<Categoria> categorias;
+	
+	@Valid
+	private List<EntidadeGenericaIdInput> gruposSociais;
+	
+	@Valid
+	private List<EntidadeGenericaIdInput> pessoasNeurodivergente;
+	
+	@Valid
+	private List<EntidadeGenericaIdInput> pessoasComDeficiencia;
+	
+	@Valid
+	private List<EntidadeGenericaIdInput> polos;
 	
 	@NotNull
 	private Boolean exportado;
