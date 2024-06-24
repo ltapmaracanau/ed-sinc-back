@@ -133,19 +133,14 @@ public class PessoaComDeficienciaController {
 	@GetMapping("/consultar")
 	@Operation(
 			summary = "Retorna todos os pessoaComDeficiencia com base nos filtros de consulta em uma lista.", 
-			description = "Método que retorna todos os pessoaComDeficiencia com base nos filtros e pode ser customizado com os parâmetros do Pageable como: sort, size, page. Requer role 'Administrador'.", 
-			security = {@SecurityRequirement(name = "Bearer Authentication")})
-	@RolesAllowed({"Administrador"})
+			description = "Método que retorna todos os pessoaComDeficiencia com base nos filtros e pode ser customizado com os parâmetros do Pageable como: sort, size, page. Requer role 'Administrador'.")
     @ApiResponses(value = {
     		@ApiResponse(responseCode = "200", description = "Sucesso na requisição de listagem."),
-            @ApiResponse(responseCode = "400", description = "Parâmetro com formatação incorreta ou Categoria não corresponde à operação."),
-            @ApiResponse(responseCode = "401", description = "Token JWT expirado."),
-            @ApiResponse(responseCode = "403", description = "Token JWT não inserido no cabeçalho."),
+            @ApiResponse(responseCode = "400", description = "Parâmetro com formatação incorreta."),
             @ApiResponse(responseCode = "404", description = "Violação das regras de negócio."),
             @ApiResponse(responseCode = "500", description = "Erro no Sistema."),
     })
-	public PagePessoaComDeficienciaPesquisaProjection consultarUsuarios(@RequestHeader("Authorization") String bearerToken, Pageable pageable, PessoaComDeficienciaFilter filtro){
-		usuarioService.autorizarAdmin(bearerToken);
+	public PagePessoaComDeficienciaPesquisaProjection consultarUsuarios(Pageable pageable, PessoaComDeficienciaFilter filtro){
 		return pessoaComDeficienciaService.listarPessoaComDeficienciaPesquisaProjetado(filtro, pageable);
 	}
 	

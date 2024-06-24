@@ -44,7 +44,7 @@ public class PoloService {
 				.anyMatch(usuarioExistente -> !usuarioExistente.equals(polo));
 		if (nomeEmUso) {
 			throw new NegocioException(
-					String.format("Já existe um grupo social cadastrado com este nome %s", polo.getNome()));
+					String.format("Já existe um Polo cadastrado com este nome %s", polo.getNome()));
 		}
 		
 		return poloRepository.save(polo);

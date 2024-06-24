@@ -7,14 +7,11 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.enums.Raca;
-import br.gov.ed_sinc.model.enums.Status;
-import br.gov.ed_sinc.validator.validate.ValidateConfirmarSenha;
+import br.gov.ed_sinc.validator.validate.ValidateConfirmarEmail;
 import br.gov.ed_sinc.validator.validate.ValidateDate;
 import br.gov.ed_sinc.validator.validate.ValidateTelefone;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -25,19 +22,15 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class UsuarioInput {
+public class PreCadastroInput {
 	@NotBlank
 	@Size(max = 60)
 	private String nome;
-
-	@ValidateConfirmarSenha
-	@Valid
-	private SenhaEConfirmarSenhaInput senhaEConfirmarSenha;
 	
-	@Email
-	@NotBlank
-	private String email;
-
+	@ValidateConfirmarEmail
+	@Valid
+	private EmailEConfirmarEmailInput emailEConfirmarEmail;
+	
 	@CPF
 	private String cpf;
 
@@ -47,8 +40,6 @@ public class UsuarioInput {
 	@Past
 	@ValidateDate
 	private LocalDate dataNascimento;
-	
-	private List<Categoria> categorias;
 	
 	@Valid
 	private List<EntidadeGenericaIdInput> gruposSociais;
@@ -63,16 +54,11 @@ public class UsuarioInput {
 	private List<EntidadeGenericaIdInput> polos;
 	
 	@NotNull
-	private Boolean exportado;
-	
-	@NotNull
-	private Status status;
-	
-	@NotNull
-	private Raca raca;
+    private Raca raca;
 	
 	@JsonIgnore
-	public String getSenha() {
-		return senhaEConfirmarSenha.getSenha();
+	public String getEmail() {
+		return emailEConfirmarEmail.getEmail();
 	}
+	
 }

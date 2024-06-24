@@ -33,6 +33,10 @@ public class SecurityConfig {
 				authorizeRequests
 					.requestMatchers("/auth/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/pcd/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/polos/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/grupossociais/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/neurodivergente/**").permitAll()
 					.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
 					.anyRequest().authenticated()
 			)

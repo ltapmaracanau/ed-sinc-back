@@ -44,7 +44,7 @@ public class PessoaNeurodivergenteService {
 				.anyMatch(usuarioExistente -> !usuarioExistente.equals(pessoaNeurodivergente));
 		if (nomeEmUso) {
 			throw new NegocioException(
-					String.format("Já existe um grupo social cadastrado com este nome %s", pessoaNeurodivergente.getNome()));
+					String.format("Já existe uma Pessoa Neurodivergente cadastrado com este nome %s", pessoaNeurodivergente.getNome()));
 		}
 		
 		return pessoaNeurodivergenteRepository.save(pessoaNeurodivergente);

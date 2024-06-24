@@ -44,7 +44,7 @@ public class PessoaComDeficienciaService {
 				.anyMatch(usuarioExistente -> !usuarioExistente.equals(pessoaComDeficiencia));
 		if (nomeEmUso) {
 			throw new NegocioException(
-					String.format("Já existe um grupo social cadastrado com este nome %s", pessoaComDeficiencia.getNome()));
+					String.format("Já existe uma PCD cadastrado com este nome %s", pessoaComDeficiencia.getNome()));
 		}
 		
 		return pessoaComDeficienciaRepository.save(pessoaComDeficiencia);

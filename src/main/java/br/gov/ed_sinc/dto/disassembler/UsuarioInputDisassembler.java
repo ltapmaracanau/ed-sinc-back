@@ -9,13 +9,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.gov.ed_sinc.dto.input.PreCadastroInput;
 import br.gov.ed_sinc.dto.input.UsuarioInput;
-import br.gov.ed_sinc.model.Usuario;
-import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.model.GrupoSocial;
 import br.gov.ed_sinc.model.PessoaComDeficiencia;
 import br.gov.ed_sinc.model.PessoaNeurodivergente;
 import br.gov.ed_sinc.model.Polo;
+import br.gov.ed_sinc.model.Usuario;
+import br.gov.ed_sinc.model.enums.Categoria;
 
 @Component
 public class UsuarioInputDisassembler {
@@ -27,7 +28,21 @@ public class UsuarioInputDisassembler {
         return modelMapper.map(usuarioInput, Usuario.class);
     }
     
+    public Usuario toDomainObjectPreRegistro(PreCadastroInput usuarioInput) {
+        return modelMapper.map(usuarioInput, Usuario.class);
+    }
+    
     public void copyToDomainObject(UsuarioInput usuarioInput, Usuario usuario) {
+        usuario.setCategorias(new ArrayList<Categoria>());
+        initializeListIfNecessary(usuario.getGruposSociais(), usuarioInput.getGruposSociais(), usuario::setGruposSociais, GrupoSocial.class);
+        initializeListIfNecessary(usuario.getPolos(), usuarioInput.getPolos(), usuario::setPolos, Polo.class);
+        initializeListIfNecessary(usuario.getPessoasComDeficiencia(), usuarioInput.getPessoasComDeficiencia(), usuario::setPessoasComDeficiencia, PessoaComDeficiencia.class);
+        initializeListIfNecessary(usuario.getPessoasNeurodivergente(), usuarioInput.getPessoasNeurodivergente(), usuario::setPessoasNeurodivergente, PessoaNeurodivergente.class);
+
+        modelMapper.map(usuarioInput, usuario);
+    }
+    
+    public void copyToDomainObjectPreRegistro(PreCadastroInput usuarioInput, Usuario usuario) {
         usuario.setCategorias(new ArrayList<Categoria>());
         initializeListIfNecessary(usuario.getGruposSociais(), usuarioInput.getGruposSociais(), usuario::setGruposSociais, GrupoSocial.class);
         initializeListIfNecessary(usuario.getPolos(), usuarioInput.getPolos(), usuario::setPolos, Polo.class);

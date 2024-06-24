@@ -1,7 +1,5 @@
 package br.gov.ed_sinc.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.gov.ed_sinc.config.JwtService;
+import br.gov.ed_sinc.dto.disassembler.UsuarioInputDisassembler;
+import br.gov.ed_sinc.dto.input.PreCadastroInput;
+import br.gov.ed_sinc.exception.NegocioException;
 import br.gov.ed_sinc.model.Usuario;
-import br.gov.ed_sinc.model.enums.Categoria;
 import br.gov.ed_sinc.repository.UsuarioRepository;
 import br.gov.ed_sinc.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class AuthenticationService {
 	private final UserDetailsService userDetailsService;
 	private final AuthenticationManager authenticationManager;
 	private final UsuarioService usuarioService;
+	private final UsuarioInputDisassembler usuarioInputDisassembler;
 
 	@Value("${edsinc.frontend-url}")
 	private String frontendURL;
@@ -52,24 +53,22 @@ public class AuthenticationService {
 		return AuthenticationResponse.builder().token(jwtToken).build();
 	}
 
-	public AuthenticationResponse registerCategoriaUsuarioComum(RegisterRequest request) {
+	public AuthenticationResponse registerCategoriaUsuarioComum(PreCadastroInput request) {
+		Usuario usuario = usuarioInputDisassembler.toDomainObjectPreRegistro(request);
+		repository.detach(usuario);
 		String senha = RandomString.make(20);
-		var user = Usuario.builder()
-				.nome(request.getNome())
-				.cpf(request.getCpf())
-				.email(request.getEmail())
-				.senha(passwordEncoder.encode(senha))
-				.telefone(request.getTelefone())
-				.categorias(new ArrayList<Categoria>(List.of(Categoria.Aluno)))
-				.accountNonLocked(true)
-				.dataNascimento(request.getDataNascimento())
-				.failedAttempt(0)
-				.build();
-		repository.save(user);
-		var jwtToken = jwtService.generateToken(user);
+		usuario.setSenha(senha);
+		boolean emailEmUso = repository.findByEmail(usuario.getEmail()).stream()
+				.anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
+		if (emailEmUso) {
+			throw new NegocioException(
+					String.format("Já existe um usuário cadastrado com o e-mail %s", usuario.getEmail()));
+		}
+		repository.save(usuario);
+		var jwtToken = jwtService.generateToken(usuario);
 		String token = RandomString.make(8);
 		String linksetSenha = frontendURL + "/novaSenha";
-		usuarioService.setarSenhaUsuarioComum(request.getEmail(), token, linksetSenha);
+		usuarioService.setarSenhaUsuarioComum(request.getEmailEConfirmarEmail().getEmail(), token, linksetSenha);
 		return AuthenticationResponse.builder().token(jwtToken).build();
 	}
 

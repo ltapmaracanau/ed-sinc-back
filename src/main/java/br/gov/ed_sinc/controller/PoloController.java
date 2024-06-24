@@ -133,23 +133,17 @@ public class PoloController {
 	@GetMapping("/consultar")
 	@Operation(
 			summary = "Retorna todos os polo com base nos filtros de consulta em uma lista.", 
-			description = "Método que retorna todos os polos com base nos filtros e pode ser customizado com os parâmetros do Pageable como: sort, size, page. Requer role 'Administrador'.", 
-			security = {@SecurityRequirement(name = "Bearer Authentication")})
-	@RolesAllowed({"Administrador"})
+			description = "Método que retorna todos os polos com base nos filtros e pode ser customizado com os parâmetros do Pageable como: sort, size, page. Requer role 'Administrador'.")
     @ApiResponses(value = {
     		@ApiResponse(responseCode = "200", description = "Sucesso na requisição de listagem."),
-            @ApiResponse(responseCode = "400", description = "Parâmetro com formatação incorreta ou Categoria não corresponde à operação."),
-            @ApiResponse(responseCode = "401", description = "Token JWT expirado."),
-            @ApiResponse(responseCode = "403", description = "Token JWT não inserido no cabeçalho."),
+            @ApiResponse(responseCode = "400", description = "Parâmetro com formatação incorreta."),
             @ApiResponse(responseCode = "404", description = "Violação das regras de negócio."),
             @ApiResponse(responseCode = "500", description = "Erro no Sistema."),
     })
-	public PagePoloPesquisaProjection consultarUsuarios(@RequestHeader("Authorization") String bearerToken, Pageable pageable, PoloFilter filtro){
-		usuarioService.autorizarAdmin(bearerToken);
+	public PagePoloPesquisaProjection consultarUsuarios(Pageable pageable, PoloFilter filtro){
 		return poloService.listarPoloPesquisaProjetado(filtro, pageable);
 	}
 	
-
 	@GetMapping("/bloquear/{id}")
 	@Operation(
 			summary = "Bloqueia um polo com base no seu id.", 
