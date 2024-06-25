@@ -1,6 +1,6 @@
 # ed-sinc
 
-Sistema de sincronização educacional para gerenciamento e monitoramento de dados escolares.
+Sistema de inscrições e gerenciamento de turmas e usuários para exportação.
 
 ## Índice
 
@@ -13,11 +13,10 @@ Sistema de sincronização educacional para gerenciamento e monitoramento de dad
 ## Recursos
 
 - Autenticação e autorização de usuários
-- Gerenciamento de dados de alunos e professores
 - Envio de notificações por email
 - Suporte a operações CRUD (Create, Read, Update, Delete)
 - Documentação da API com Swagger
-- Armazenamento de imagens de perfil
+- Armazenamento de mídia de perfil
 
 ## Instalação
 
