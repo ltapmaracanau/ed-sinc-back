@@ -105,8 +105,13 @@ A documentação da API é gerada usando Springdoc OpenAPI. Acesse a interface d
 ```bash
 http://localhost:8080/swagger-ui.html
  ```
-2. JWT token
-Authorization: Bearer [seu_jwt_token]
+2. JWT token:
+- A partir da autenticação (Realizar Login) é gerado um JWT que será utilizado em algumas das requisições, quando é necessário o JWT a documentação do end-point é ilustrada com um cadeado ao lado.
+- Para se autenticar é necessário ter as credenciais do usuario administrador, por exemplo. As entidades controller documentam e exibem os dados necessários para as requisições.
+- No cabeçalho HTTP é inserido 'Authorization: Bearer [seu_jwt_token]' para as requisições.
+- Para se autenticar, utilize POST [servidor]/auth/authenticate com as credenciais [email] e [senha].
+- Para ter acesso a um usuário teste/exemplo localize o arquivo `UsuarioDataLoader.java` e utilize as credenciais da massa teste.
+- Ao efetuar a requisição POST [servidor]/auth/authenticate com sucesso é retornado um objeto [token] caso contrário é retornado um objeto com os possíveis erros.
 
 3. Utilização de end-points (Exemplo para Usuários):
 - DELETE [servidor]/usuarios/{id}: Deleta um usuário com base no seu ID.
