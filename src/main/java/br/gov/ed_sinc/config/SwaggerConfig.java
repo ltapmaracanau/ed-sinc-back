@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
 public class SwaggerConfig {
@@ -19,6 +20,7 @@ public class SwaggerConfig {
 				.addSecurityItem(new SecurityRequirement().
 			            addList("Bearer Authentication"))
 				 */
+				.addServersItem(new Server().url("https://ed-sinc-back-production.up.railway.app").description("Production server"))
 			    .components(new Components().addSecuritySchemes
 			            ("Bearer Authentication", createAPIKeyScheme()))
 			           
